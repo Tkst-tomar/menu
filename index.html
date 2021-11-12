@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Menu</title>
+
+    <style>
+        *{margin: 0px;padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;color: white;}
+        :root{
+            --height:50vh;
+         
+        }
+        .menu{background-image: url(img/bnnerImg.jpg);position: absolute;width: 100vw;height: 100vh;background-size: cover;background-repeat: no-repeat;opacity: 0.8;}
+        ul{list-style-type: none;padding: 0px;font-size: 20px;font-weight: 400;}
+        li{cursor: pointer;padding-left: 10px;}
+        .starter{position: absolute;top: var(--height);left: 10vw;}
+        .mainCourse{position: absolute;top: var(--height);left: 30vw ;}
+        .specialItems{position: absolute;top: var(--height);left: 50vw;}
+        .displayItem{position: absolute;top: var(--height);left: 70vw;border: 2px solid white;height: 300px;padding: 20px;}
+        .displayItem ul{font-size: 15px;padding: 5px;}
+        .displayItem ul li:hover{background-color: rgb(100, 100, 100);}
+        .tot{position: absolute;bottom: 10%;left: 10%;}
+        #specialItem1{color: black;padding: 5px;font-size: 20px;}
+        .uppsepad{margin-top: 10px;}
+        #msg{font-size: 20px;font-weight: 400;}
+        #selectMe{margin-top: 5px;}
+        h2{margin: 5px 0px;font-size: 30px;}
+     
+    </style>
+</head>
+
+<body>
+    <div class="menu">
+        <div class="starter">
+            <h2>STARTERS</h2>
+            <ul class="starterList">
+                <li onclick='selectOption(this.innerText)'>Afghan Mutton Tikka</li>
+                <li onclick='selectOption(this.innerText)'>Cheez Balls</li>
+                <li onclick='selectOption(this.innerText)'>Chicken Kurkure</li>
+                <li onclick='selectOption(this.innerText)'>Fish Tikka</li>
+                <li onclick='selectOption(this.innerText)'>Tandoori Chicken</li>
+                <li onclick='selectOption(this.innerText)'>Barbeque Chicken</li>
+            </ul>
+        </div>
+        <div class="mainCourse">
+            <h2>MAIN COURSE</h2>
+            <ul class="mainCourseList">
+                <li onclick='selectOption(this.innerText)'>Butter Chicken</li>
+                <li onclick='selectOption(this.innerText)'>Chicken Briyani Boneless</li>
+                <li onclick='selectOption(this.innerText)'>Mutton Briyani</li>
+                <li onclick='selectOption(this.innerText)'>Chicken Tikka Briyani</li>
+                <li onclick='selectOption(this.innerText)'>Veg Briyani</li>
+            </ul>
+        </div>
+        <div class="specialItems">
+            <h2>SPECIAL ITEMS</h2>
+            <input type="text" id="specialItem1" placeholder="Please Select Only One" disabled>
+            <ul id="selectMe">
+                <li onclick="selectOption1(this.innerText)">Chocolate Brownie Shake</li>
+                <li onclick="selectOption1(this.innerText)">KitKat Shake</li>
+                <li onclick="selectOption1(this.innerText)">Oreo Shake</li>
+                <li onclick="selectOption1(this.innerText)">Soft Serve</li>
+            </ul>
+        </div>
+        <div class="displayItem">
+            <h2>Order Summary</h2>
+            <ul id="yourOrder">
+
+            </ul>
+            <ul id="specialItem$" class="uppsepad">
+
+            </ul>
+           <span class="tot">Total :- <span id="msg">0</span></span> 
+        </div>
+    </div>
+
+    <script>
+        var filterData = []
+        var specialDish
+        var total = 0
+        var data = [{ name: "Afghan Mutton Tikka", cost: 450, path: "img/agghaniTikka.webp", type: "starter" },
+        { name: "Butter Chicken", cost: 250, path: "img/butterChicken.webp", type: "main Course" },
+        { name: "Chicken Briyani Boneless", cost: 400, path: "img/chickenBriyaniBoneless.webp", type: "main Course" },
+        { name: "Cheez Balls", cost: 145, path: "img/cheezBaools.webp", type: "starter" },
+        { name: "Chicken Kurkure", cost: 185, path: "img/chickenKurkure.webp", type: "starter" },
+        { name: "Chocolate Brownie Shake", cost: 0, path: "img/ChocolateBrownie.webp", type: "'special Item" },
+        { name: "Fish Tikka", cost: 180, path: "img/FishTikka.webp", type: "starter" },
+        { name: "Kitkat Shake", cost: 0, path: "img/kitkatShake.webp", type: "'special Item" },
+        { name: "Mutton Briyani", cost: 650, path: "img/muttonBriyani.webp", type: "main Course" },
+        { name: "Oreo Shake", cost: 0, path: "img/oreoShake.webp", type: "'special Item" },
+        { name: "Soft Serve", cost: 0, path: "img/softServe.webp", type: "'special Item" },
+        { name: "Tandoori Chicken", cost: 210, path: "img/tandoori_chicken.webp", type: "starter" },
+        { name: "Barbeque Chicken", cost: 400, path: "img/tandooriChicken.webp", type: "starter" },
+        { name: "Chicken Tikka Briyani", cost: 450, path: "img/tikkaBriyani.webp", type: "main Course" },
+        { name: "Veg Briyani", cost: 150, path: "img/veg_briyani.webp", type: "main Course" }]
+
+
+
+
+        var click = 0
+
+
+        function selectOption(x) {
+            filterData = "";
+            click++
+            for (i in data) {
+                
+                
+                if (data[i].name == x) {
+                    filterData += `<li onclick = 'removeList(this)' id='special${click}'>${data[i].name}</li>`
+                    total += data[i].cost
+
+                }
+
+
+
+            }
+            
+            document.getElementById("yourOrder").innerHTML += filterData
+            document.getElementById("msg").innerHTML = total
+
+        }
+        function selectOption1(y) {
+
+            specialDish = `<li onclick = 'removeList(this)' id='special'>${y}</li>`
+
+            document.getElementById("specialItem$").innerHTML = specialDish
+            document.getElementById("specialItem1").value = y
+
+
+        }
+
+        function removeList(z) {
+
+            document.getElementById(z.id).style.display = "none"
+
+            for (key in data) {
+                if (data[key].name == z.innerText) {
+                    total = total - data[key].cost
+
+                }
+            }
+            document.getElementById("msg").innerHTML = total
+        }
+
+
+
+    </script>
+</body>
+
+</html>
